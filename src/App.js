@@ -3,21 +3,27 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 
+const url =
+  "https://raw.githubusercontent.com/saaslabsco/frontend-assignment/refs/heads/master/frontend-assignment.json";
+
 const App = () => {
   const [projects, setProjects] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [visiblePages, setVisiblePages] = useState([1, 2, 3, 4, 5]);
+
   const itemsPerPage = 5;
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = projects?.slice(startIndex, startIndex + itemsPerPage);
 
   useEffect(() => {
     const fetchProjects = async () => {
       setLoading(true);
       setError("");
       try {
-        const response = await axios.get(
-          "https://raw.githubusercontent.com/saaslabsco/frontend-assignment/refs/heads/master/frontend-assignment.json"
-        );
+        const response = await axios.get(url);
         setProjects(response.data);
       } catch (error) {
         setError("Failed to fetch data. Please try again later.");
@@ -28,61 +34,79 @@ const App = () => {
     fetchProjects();
   }, []);
 
-  const totalPages = Math.ceil(projects.length / itemsPerPage);
+  const handleNextPage = () => {
+    const totalPages = Math.ceil(projects.length / itemsPerPage);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      if (currentPage + 1 > visiblePages[visiblePages.length - 1]) {
+        setVisiblePages(visiblePages.map((page) => page + 1));
+      }
+    }
+  };
 
-  const handlePageChange = (pageNumber) => {
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      if (currentPage - 1 < visiblePages[0]) {
+        setVisiblePages(visiblePages.map((page) => page - 1));
+      }
+    }
+  };
+
+  const handlePageClick = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  const currentItems = projects.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  if (loading) {
+    return <div className="loading">Loading projects...</div>;
+  }
+
+  if (error) {
+    return <div className="error">{error}</div>;
+  }
 
   return (
-    <div className="container">
-      <h1>Kickstarter Projects</h1>
-      {loading && <p aria-live="polite">Loading projects...</p>}
-      {error && (
-        <p className="error" role="alert">
-          {error}
-        </p>
-      )}
-      {!loading && !error && (
-        <>
-          <table className="projects-table" aria-label="Kickstarter Projects">
-            <thead>
-              <tr>
-                <th scope="col">S.No.</th>
-                <th scope="col">Percentage Funded</th>
-                <th scope="col">Amount Pledged</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.map((project, index) => (
-                <tr key={index}>
-                  <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                  <td>{project["percentage.funded"]}</td>
-                  <td>{project["amt.pledged"]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="pagination" role="navigation" aria-label="Pagination">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i}
-                onClick={() => handlePageChange(i + 1)}
-                className={currentPage === i + 1 ? "active" : ""}
-                aria-current={currentPage === i + 1 ? "page" : undefined}
-                data-testid={`page-${i + 1}`}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
-        </>
-      )}
+    <div className="app-container">
+      <h1 className="title">Kickstarter Projects</h1>
+      <table className="project-table">
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>% Percentage Funded</th>
+            <th>$ Amount Pledged</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems.map((item, index) => (
+            <tr key={index}>
+              <td>{startIndex + index + 1}</td>
+              <td>{item["percentage.funded"]}%</td>
+              <td>${item["amt.pledged"].toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="pagination">
+        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+          {"<< Prev"}
+        </button>
+        {visiblePages.map((page) => (
+          <button
+            key={page}
+            onClick={() => handlePageClick(page)}
+            className={currentPage === page ? "active" : ""}
+            disabled={page > Math.ceil(projects.length / itemsPerPage)}
+          >
+            {page}
+          </button>
+        ))}
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === Math.ceil(projects.length / itemsPerPage)}
+        >
+          {"Next >>"}
+        </button>
+      </div>
     </div>
   );
 };
