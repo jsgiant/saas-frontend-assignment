@@ -1,5 +1,29 @@
 # Frontend Assignment
 
+## App
+
+In the project directory, you can run:
+
+### `yarn start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
+
+### `yarn test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `yarn run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
 ## Assignment
 
@@ -10,9 +34,10 @@ Use the web API (link : https://raw.githubusercontent.com/saaslabsco/frontend-as
 ## Minimum Requirements
 
 1. Create a table and list the following three attributes for all the projects:
-    * S.No.
-    * Percentage funded
-    * Amount pledged
+
+   - S.No.
+   - Percentage funded
+   - Amount pledged
 
 1. Ensure that the UI is aesthetically pleasing to gain extra points.
 1. Implement pagination with maximum 5 records per page.
@@ -21,30 +46,28 @@ Use the web API (link : https://raw.githubusercontent.com/saaslabsco/frontend-as
 ### Expected Output format
 
 | **S.No.** | **Percentage funded** | **Amount pledged** |
-|-----------|-----------------------|--------------------|
+| --------- | --------------------- | ------------------ |
 | 0         | 186                   | 15283              |
-
 
 ## Good to have
 
 1. Unit tests.
 1. Accessibility.
 
-
 ## Steps for submission
 
 1. Fork this repo.
 1. Do changes to the above assignment.
 1. Email the assignment back to us with:
-    1. Link of the open source repo.
-    1. Link of the assignment hosted online. (You can use any free tools to host this assignment, eg. vercel, netlify or heroku). It should be accessible online for atleast 7 days.
-
+   1. Link of the open source repo.
+   1. Link of the assignment hosted online. (You can use any free tools to host this assignment, eg. vercel, netlify or heroku). It should be accessible online for atleast 7 days.
 
 ## Frameworks Allowed
+
 1. React/Vanilla JS for JavaScript
 1. No framework for CSS. Only Raw CSS is allowed.
 
 ## Note
 
-1. Result on platforms like codesandbox, replit are not accepted. 
+1. Result on platforms like codesandbox, replit are not accepted.
 1. Private unaccessible links will lead to rejection.
